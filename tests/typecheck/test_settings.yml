@@ -1,0 +1,52 @@
+- case: test_api_settings_import_strings_reveal_types
+  main: |
+    from rest_framework.settings import api_settings
+
+    reveal_type(api_settings.DEFAULT_RENDERER_CLASSES) # N: Revealed type is "typing.Sequence[Type[rest_framework.renderers.BaseRenderer]]"
+    reveal_type(api_settings.DEFAULT_PARSER_CLASSES) # N: Revealed type is "typing.Sequence[Type[rest_framework.parsers.BaseParser]]"
+    reveal_type(api_settings.DEFAULT_AUTHENTICATION_CLASSES) # N: Revealed type is "typing.Sequence[Type[rest_framework.authentication.BaseAuthentication]]"
+    reveal_type(api_settings.DEFAULT_PERMISSION_CLASSES) # N: Revealed type is "typing.Sequence[Type[rest_framework.permissions.BasePermission]]"
+    reveal_type(api_settings.DEFAULT_THROTTLE_CLASSES) # N: Revealed type is "typing.Sequence[Type[rest_framework.throttling.BaseThrottle]]"
+    reveal_type(api_settings.DEFAULT_CONTENT_NEGOTIATION_CLASS) # N: Revealed type is "Type[rest_framework.negotiation.BaseContentNegotiation]"
+    reveal_type(api_settings.DEFAULT_METADATA_CLASS) # N: Revealed type is "Type[rest_framework.metadata.BaseMetadata]"
+    reveal_type(api_settings.DEFAULT_VERSIONING_CLASS) # N: Revealed type is "Union[Type[rest_framework.versioning.BaseVersioning], None]"
+    reveal_type(api_settings.DEFAULT_PAGINATION_CLASS) # N: Revealed type is "Union[Type[rest_framework.pagination.BasePagination], None]"
+    reveal_type(api_settings.DEFAULT_FILTER_BACKENDS) # N: Revealed type is "typing.Sequence[Type[rest_framework.filters.BaseFilterBackend]]"
+    reveal_type(api_settings.DEFAULT_SCHEMA_CLASS) # N: Revealed type is "Type[rest_framework.schemas.inspectors.ViewInspector]"
+    reveal_type(api_settings.EXCEPTION_HANDLER) # N: Revealed type is "def (builtins.Exception, Any) -> rest_framework.response.Response"
+    reveal_type(api_settings.TEST_REQUEST_RENDERER_CLASSES) # N: Revealed type is "typing.Sequence[Type[rest_framework.renderers.BaseRenderer]]"
+    reveal_type(api_settings.UNAUTHENTICATED_USER) # N: Revealed type is "Type[django.contrib.auth.base_user.AbstractBaseUser]"
+    reveal_type(api_settings.UNAUTHENTICATED_TOKEN) # N: Revealed type is "Union[builtins.type, None]"
+    reveal_type(api_settings.VIEW_NAME_FUNCTION) # N: Revealed type is "def (rest_framework.views.APIView) -> builtins.str"
+    reveal_type(api_settings.VIEW_DESCRIPTION_FUNCTION) # N: Revealed type is "def (rest_framework.views.APIView) -> builtins.str"
+
+- case: test_api_settings_import_strings_default_comparisons
+  main: |
+    from rest_framework.settings import api_settings
+
+    from rest_framework.renderers import JSONRenderer
+    from rest_framework.parsers import JSONParser
+    from rest_framework.authentication import SessionAuthentication
+    from rest_framework.permissions import AllowAny
+    from rest_framework.negotiation import DefaultContentNegotiation
+    from rest_framework.metadata import SimpleMetadata
+    from rest_framework.schemas.openapi import AutoSchema
+    from django.contrib.auth.models import AnonymousUser
+    from rest_framework.views import get_view_name, get_view_description
+    from rest_framework.views import exception_handler
+
+    assert JSONRenderer in api_settings.DEFAULT_RENDERER_CLASSES
+    assert JSONParser in api_settings.DEFAULT_PARSER_CLASSES
+    assert SessionAuthentication in api_settings.DEFAULT_AUTHENTICATION_CLASSES
+    assert AllowAny in api_settings.DEFAULT_PERMISSION_CLASSES
+    assert api_settings.DEFAULT_CONTENT_NEGOTIATION_CLASS == DefaultContentNegotiation
+    assert api_settings.DEFAULT_METADATA_CLASS == SimpleMetadata
+    assert api_settings.DEFAULT_VERSIONING_CLASS is None
+    assert api_settings.DEFAULT_PAGINATION_CLASS is None
+    assert api_settings.DEFAULT_SCHEMA_CLASS == AutoSchema
+    assert api_settings.UNAUTHENTICATED_USER == AnonymousUser
+    assert api_settings.UNAUTHENTICATED_TOKEN is None
+    assert api_settings.VIEW_NAME_FUNCTION == get_view_name
+    assert api_settings.VIEW_DESCRIPTION_FUNCTION == get_view_description
+    assert api_settings.EXCEPTION_HANDLER == exception_handler
+    assert JSONRenderer in api_settings.TEST_REQUEST_RENDERER_CLASSES
